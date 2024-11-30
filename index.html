@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countdown/2.6.0/countdown.min.js"></script>
+     <link rel="stylesheet" href="styl.css">
+</head>
+<body class="h-full">
+    <div class="min-h-full" x-data="taskApp()">
+        <div class="flex items-center justify-center min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto">
+                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center mb-6 flex justify-center text-center py-2">
+                            <h1 class="text-3xl font-bold text-gray-900">Task Manager</h1>
+                        </div>
+
+                        <form @submit.prevent="addTask(newTaskTitle, newTaskTime)" class="mb-6">
+                            <div class="flex items-center">
+                                <input type="text" x-model="newTaskTitle" placeholder="Add a new task..." class="flex-grow mr-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="number" x-model="newTaskTime" placeholder="Time (minutes)" class="w-24 mr-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="mb-6">
+                            <input type="text" x-model="searchQuery" placeholder="Search tasks..." class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <ul class="space-y-4">
+                            <template x-for="(task, index) in filteredTasks()" :key="index">
+                                <li class="bg-gray-50 p-4 rounded-md shadow-sm">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" x-model="task.completed" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <span :class="{'line-through text-gray-500': task.completed}" class="ml-3" x-text="task.title"></span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button @click="editTask(index)" class="text-gray-600 hover:text-blue-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                </svg>
+                                            </button>
+                                            <button @click="deleteTask(index)" class="text-gray-600 hover:text-red-500">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Display time left -->
+                                    <p class="mt-2 text-gray-600" x-text="task.timeLeft"></p>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
